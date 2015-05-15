@@ -1,0 +1,16 @@
+web:
+  build: ./nginx
+  links:
+    - phpfpm
+  volumes_from:
+    - phpfpm
+  ports:
+    - "80:80"
+
+phpfpm:
+  build: ./phpfpm
+  volumes:
+    - phpfpm/config/php:/usr/local/etc/php
+    - phpfpm/src:/var/www/html
+  ports:
+    - "9000:9000"
