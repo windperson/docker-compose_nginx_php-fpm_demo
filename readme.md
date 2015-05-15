@@ -4,7 +4,7 @@ Usage instruction:
 
 1. Install [Docker-compose](https://docs.docker.com/compose/).
 
-2. Check out [**master**](./tree/master) branch.
+2. Check out [**master**](../../tree/master) branch.
 
 3. Use command to start up Nginx & PHP-FPM docker containers:
 	````Bash
