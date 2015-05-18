@@ -5,8 +5,6 @@ RUN pear config-set php_ini /usr/local/etc/php/php.ini
 RUN docker-php-ext-install intl mbstring zip mysqli pdo_mysql
 RUN pecl install -o -f apcu-beta redis xdebug && rm -rf /tmp/pear
 
-VOLUME /usr/local/etc/php
-COPY config/php-fpm.conf /usr/local/etc/php-fpm.conf
-
+VOLUME /usr/local/etc/
 VOLUME /var/www/html
 CMD ["php-fpm"]
