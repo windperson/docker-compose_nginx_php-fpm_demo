@@ -1,4 +1,4 @@
-web:
+nginx:
   build: conf/nginx
   volumes:
     - conf/nginx/config:/etc/nginx
@@ -17,3 +17,9 @@ phpfpm:
     - src:/var/www/html
   ports:
     - "9000:9000"
+
+redis:
+  build: conf/redis
+  volumes:
+    - conf/redis/config:/usr/local/etc/redis
+    - data/redis:/data
