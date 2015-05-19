@@ -1,16 +1,19 @@
 web:
-  build: ./nginx
+  build: conf/nginx
+  volumes:
+    - conf/nginx/config:/etc/nginx
   links:
     - phpfpm
   volumes_from:
     - phpfpm
   ports:
     - "80:80"
+    - "443:443"
 
 phpfpm:
-  build: ./phpfpm
+  build: conf/phpfpm
   volumes:
-    - phpfpm/config:/usr/local/etc
-    - phpfpm/src:/var/www/html
+    - conf/phpfpm/config:/usr/local/etc
+    - src:/var/www/html
   ports:
     - "9000:9000"
