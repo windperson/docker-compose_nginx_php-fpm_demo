@@ -12,14 +12,18 @@ nginx:
 
 phpfpm:
   build: conf/phpfpm
+  links:
+    - redis0cache
   volumes:
     - conf/phpfpm/config:/usr/local/etc
     - src:/var/www/html
   ports:
     - "9000:9000"
 
-redis:
+redis0cache:
   build: conf/redis
   volumes:
     - conf/redis/config:/usr/local/etc/redis
     - data/redis:/data
+  ports:
+   - "6379:6379"
