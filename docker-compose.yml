@@ -17,8 +17,6 @@ phpfpm:
   volumes:
     - conf/phpfpm/config:/usr/local/etc
     - src:/var/www/html
-  ports:
-    - "9000:9000"
 
 redis0cache:
   build: conf/redis
