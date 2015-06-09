@@ -1,16 +1,23 @@
-proxy:
+# connection proxy container
+link2phpfpm:
   image: cpuguy83/docker-grand-ambassador
   volumes:
    - "/var/run/docker.sock:/var/run/docker.sock"
-  command: "-name demo_phpfpm_1 -name demo_redis0cache_1"
+  command: "-name demo_phpfpm_1"
 
+link2redis:
+  image: cpuguy83/docker-grand-ambassador
+  volumes:
+   - "/var/run/docker.sock:/var/run/docker.sock"
+  command: "-name demo_redis0cache_1"
 
+# application container
 nginx:
   build: conf/nginx
   volumes:
     - conf/nginx/config:/etc/nginx
   links:
-    - "proxy:phpfpm"
+    - "link2phpfpm:phpfpm"
   volumes_from:
     - phpfpm
   ports:
@@ -23,7 +30,7 @@ phpfpm:
     - conf/phpfpm/config:/usr/local/etc
     - src:/var/www/html
   links:
-    - "proxy:redis0cache"
+    - "link2redis:redis0cache"
 
 redis0cache:
   build: conf/redis
