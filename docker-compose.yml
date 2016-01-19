@@ -15,7 +15,7 @@ link2redis:
 nginx:
   build: conf/nginx
   volumes:
-    - conf/nginx/config:/etc/nginx
+    - ./conf/nginx/config:/etc/nginx
   links:
     - "link2phpfpm:phpfpm"
   volumes_from:
@@ -27,15 +27,15 @@ nginx:
 phpfpm:
   build: conf/phpfpm
   volumes:
-    - conf/phpfpm/config:/usr/local/etc
-    - src:/var/www/html
+    - ./conf/phpfpm/config:/usr/local/etc
+    - ./src:/var/www/html
   links:
     - "link2redis:redis0cache"
 
 redis0cache:
   build: conf/redis
   volumes:
-    - conf/redis/config:/usr/local/etc/redis
-    - data/redis:/data
+    - ./conf/redis/config:/usr/local/etc/redis
+    - ./data/redis:/data
   ports:
    - "6379:6379"
