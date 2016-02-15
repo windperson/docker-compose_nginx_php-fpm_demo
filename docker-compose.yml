@@ -1,41 +1,41 @@
-# connection proxy container
-link2phpfpm:
-  image: cpuguy83/docker-grand-ambassador
-  volumes:
-   - "/var/run/docker.sock:/var/run/docker.sock"
-  command: "-name demo_phpfpm_1"
+version: '2'
 
-link2redis:
-  image: cpuguy83/docker-grand-ambassador
-  volumes:
-   - "/var/run/docker.sock:/var/run/docker.sock"
-  command: "-name demo_redis0cache_1"
+services:
+  # application container
+  nginx:
+    build: conf/nginx
+    volumes:
+      - ./conf/nginx/config:/etc/nginx
+    links:
+      - phpfpm
+    volumes_from:
+      - phpfpm
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - back_end
 
-# application container
-nginx:
-  build: conf/nginx
-  volumes:
-    - ./conf/nginx/config:/etc/nginx
-  links:
-    - "link2phpfpm:phpfpm"
-  volumes_from:
-    - phpfpm
-  ports:
-    - "80:80"
-    - "443:443"
+  phpfpm:
+    build: conf/phpfpm
+    volumes:
+      - ./conf/phpfpm/config:/usr/local/etc
+      - ./src:/var/www/html
+    links:
+      - redis0cache
+    networks:
+      - back_end
 
-phpfpm:
-  build: conf/phpfpm
-  volumes:
-    - ./conf/phpfpm/config:/usr/local/etc
-    - ./src:/var/www/html
-  links:
-    - "link2redis:redis0cache"
+  #cache container
+  redis0cache:
+    build: conf/redis
+    volumes:
+      - ./conf/redis/config:/usr/local/etc/redis
+      - ./data/redis:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - back_end
 
-redis0cache:
-  build: conf/redis
-  volumes:
-    - ./conf/redis/config:/usr/local/etc/redis
-    - ./data/redis:/data
-  ports:
-   - "6379:6379"
+networks:
+  back_end:
