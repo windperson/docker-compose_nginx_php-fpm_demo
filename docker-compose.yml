@@ -1,17 +1,20 @@
-web:
-  build: conf/nginx
-  volumes:
-    - conf/nginx/config:/etc/nginx
-  links:
-    - phpfpm
-  volumes_from:
-    - phpfpm
-  ports:
-    - "80:80"
-    - "443:443"
+version: '2'
 
-phpfpm:
-  build: conf/phpfpm
-  volumes:
-    - conf/phpfpm/config:/usr/local/etc
-    - src:/var/www/html
+services:
+  web:
+    build: conf/nginx
+    links:
+      - phpfpm
+    volumes:
+      - ./conf/nginx/config:/etc/nginx
+    volumes_from:
+      - phpfpm
+    ports:
+      - "80:80"
+      - "443:443"
+
+  phpfpm:
+    build: conf/phpfpm
+    volumes:
+      - ./conf/phpfpm/config:/usr/local/etc
+      - ./src:/var/www/html
