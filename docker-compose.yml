@@ -1,8 +1,21 @@
 version: '2'
 
 services:
+  varnish:
+    image: windperson/docker-varnish-cache
+    env_file:
+      - ./conf/varnish-cache/env/web.env
+    volumes:
+      - ./conf/varnish-cache/vcl:/etc/varnish/
+    links:
+      - default_site:normal_site
+    ports:
+      - "80:80"
+    networks:
+      - back_end
+
   # application container
-  nginx:
+  default_site:
     build: conf/nginx
     volumes:
       - ./conf/nginx/config:/etc/nginx
@@ -10,9 +23,6 @@ services:
       - phpfpm
     volumes_from:
       - phpfpm
-    ports:
-      - "80:80"
-      - "443:443"
     networks:
       - back_end
 
