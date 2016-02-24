@@ -19,7 +19,7 @@ sub vcl_recv {
   }
 
   #Exlcude from cache
-  if (req.url ~ "^/redis_counter/counter\.php"){
+  if (req.url ~ "^/redis_counter/"){
     return(pass);
   }
 }
