@@ -2,7 +2,9 @@ version: '2'
 
 services:
   varnish:
-    image: windperson/docker-varnish-cache
+    extends:
+      file: docker-compose.base.yml
+      service: varnish-base
     env_file:
       - ./conf/varnish-cache/env/web.env
     volumes:
@@ -16,7 +18,9 @@ services:
 
   # application container
   default_site:
-    build: conf/nginx
+    extends:
+      file: docker-compose.base.yml
+      service: nginx-base
     volumes:
       - ./conf/nginx/config:/etc/nginx
     links:
@@ -27,7 +31,9 @@ services:
       - back_end
 
   phpfpm:
-    build: conf/phpfpm
+    extends:
+      file: docker-compose.base.yml
+      service: phpfpm-base
     volumes:
       - ./conf/phpfpm/config:/usr/local/etc
       - ./src:/var/www/html
@@ -38,7 +44,9 @@ services:
 
   #cache container
   redis0cache:
-    build: conf/redis
+    extends:
+      file: docker-compose.base.yml
+      service: redis-base
     volumes:
       - ./conf/redis/config:/usr/local/etc/redis
       - ./data/redis:/data

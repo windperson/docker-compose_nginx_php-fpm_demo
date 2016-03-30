@@ -22,4 +22,7 @@ sub vcl_recv {
   if (req.url ~ "^/redis_counter/"){
     return(pass);
   }
+  if (req.url ~ "^/read_data/"){
+    return(pass);
+  }
 }
