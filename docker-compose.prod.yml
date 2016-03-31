@@ -1,0 +1,114 @@
+version: '2'
+
+services:
+  varnish:
+    extends:
+      file: docker-compose.base.yml
+      service: varnish-base
+    env_file:
+      - ./conf/varnish-cache/env/web.env
+    volumes_from:
+      - varnish-conf
+    links:
+      - default_site:normal_site
+    ports:
+      - "80:80"
+    networks:
+      - back_end
+
+  varnish-conf:
+    image: varnish-conf-prod
+    build:
+      context: ./conf/varnish-cache
+      dockerfile: Dockerfile.conf
+    network_mode: "none"
+
+  # nginx container
+  default_site:
+    extends:
+      file: docker-compose.base.yml
+      service: nginx-base
+    #volumes:
+    #  - ./conf/nginx/config:/etc/nginx
+    links:
+      - phpfpm
+    volumes_from:
+      - phpfpm
+      - default_site-conf
+    networks:
+      - back_end
+
+  default_site-conf:
+    image: default_site-conf-prod
+    build:
+      context: ./conf/nginx
+      dockerfile: Dockerfile.conf
+    network_mode: "none"
+
+  # phpfpm container
+  phpfpm:
+    extends:
+      file: docker-compose.base.yml
+      service: phpfpm-base
+    #volumes:
+    #  - ./conf/phpfpm/config:/usr/local/etc
+    #  - ./src:/var/www/html
+    volumes_from:
+      - phpfpm-conf:ro
+      - phpfpm-src:ro
+    links:
+      - redis0cache
+    networks:
+      - back_end
+
+  phpfpm-conf:
+    image: phpfpm-conf-prod
+    build:
+      context: ./conf/phpfpm
+      dockerfile: Dockerfile.conf
+    network_mode: "none"
+
+  phpfpm-src:
+    image: phpfpm-src-prod
+    build:
+      context: .
+      dockerfile: Dockerfile.src
+    network_mode: "none"
+
+  #cache container
+  redis0cache:
+    extends:
+      file: docker-compose.base.yml
+      service: redis-base
+    volumes:
+    #  - ./conf/redis/config:/usr/local/etc/redis
+    #  - ./data/redis:/data
+       - redis_data:/data
+    volumes_from:
+      - redis-conf:ro
+      - redis-data
+    ports:
+      - "6379:6379"
+    networks:
+      - back_end
+
+  redis-conf:
+    image: redis-conf-prod
+    build:
+      context: ./conf/redis
+      dockerfile: Dockerfile.conf
+    network_mode: "none"
+
+  redis-data:
+    image: redis-data-prod
+    build:
+      context: ./data
+      dockerfile: Dockerfile.redis.data
+    network_mode: "none"
+
+networks:
+  back_end:
+
+volumes:
+  redis_data:
+    driver: local
