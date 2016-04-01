@@ -1,8 +1,17 @@
 <?php
 
 include( '../data/data.php' );
-$data_str=var_export($container_data, true);
-echo sprintf(
-    "<html><body>This page shows reading data from other container that is mounted via volumes_from,<br/>\$data=%s</body></html>",
-    $data_str
-);
+echo  "<html><style>
+table, th, td {
+    border: 1px solid black;
+}
+</style><body>This page shows reading data from other container that is mounted via volumes_from,<br/><hr/>";
+
+echo "<table><tr><th><tr>Key</tr><tr>Value</tr></th>";
+foreach ($container_data as $key => $value) {
+  echo "<tr>";
+  echo "<td>$key</td><td>$value</td>";
+  echo "</tr>";
+}
+echo "</table><hr/>";
+echo "</body></html>";
