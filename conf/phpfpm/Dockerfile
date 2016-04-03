@@ -1,4 +1,5 @@
 FROM php:5-fpm
+MAINTAINER windperson
 # Install necessary package for following native extension compilation.
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 && apt-get -y install g++ libbz2-dev libcurl4-openssl-dev libicu-dev php5-mysql zlib1g-dev \

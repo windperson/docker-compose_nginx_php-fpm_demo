@@ -17,7 +17,7 @@ services:
       - back_end
 
   varnish-conf:
-    image: varnish-conf-prod
+    image: windperson/phpdemo/varnish-conf-prod
     build:
       context: ./conf/varnish-cache
       dockerfile: Dockerfile.conf
@@ -39,7 +39,7 @@ services:
       - back_end
 
   default_site-conf:
-    image: default_site-conf-prod
+    image: windperson/phpdemo/default_site-conf-prod
     build:
       context: ./conf/nginx
       dockerfile: Dockerfile.conf
@@ -56,24 +56,31 @@ services:
     volumes_from:
       - phpfpm-conf:ro
       - phpfpm-src:ro
+      - phpfpm-data:ro
     links:
       - redis0cache
     networks:
       - back_end
 
   phpfpm-conf:
-    image: phpfpm-conf-prod
+    image: windperson/phpdemo/phpfpm-conf-prod
     build:
       context: ./conf/phpfpm
       dockerfile: Dockerfile.conf
     network_mode: "none"
 
   phpfpm-src:
-    image: phpfpm-src-prod
+    image: windperson/phpdemo/phpfpm-src-prod
     build:
-      context: .
-      dockerfile: Dockerfile.src
+      context: ./src
     network_mode: "none"
+
+  phpfpm-data:
+    image: windperson/phpdemo/phpfpm-data-prod
+    build:
+      context: ./src/php/data
+    network_mode: "none"
+
 
   #cache container
   redis0cache:
@@ -93,17 +100,17 @@ services:
       - back_end
 
   redis-conf:
-    image: redis-conf-prod
+    image: windperson/phpdemo/redis-conf-prod
     build:
       context: ./conf/redis
       dockerfile: Dockerfile.conf
     network_mode: "none"
 
   redis-data:
-    image: redis-data-prod
+    image: windperson/phpdemo/redis-data-prod
     build:
       context: ./data
-      dockerfile: Dockerfile.redis.data
+      dockerfile: Dockerfile.data
     network_mode: "none"
 
 networks:

@@ -9,19 +9,19 @@ services:
   # application container
   nginx-base:
     build: conf/nginx
-    image: nginx-base
+    image: windperson/phpdemo/nginx-base
     volumes:
       - /etc/localtime:/etc/localtime:ro #for sync with host time
 
   phpfpm-base:
     build: conf/phpfpm
-    image: phpfpm-base
+    image: windperson/phpdemo/phpfpm-base
     volumes:
       - /etc/localtime:/etc/localtime:ro #for sync with host time
 
   #cache container
   redis-base:
     build: conf/redis
-    image: redis-base
+    image: windperson/phpdemo/redis-base
     volumes:
       - /etc/localtime:/etc/localtime:ro #for sync with host time

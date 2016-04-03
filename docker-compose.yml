@@ -36,7 +36,7 @@ services:
       service: phpfpm-base
     volumes:
       - ./conf/phpfpm/config:/usr/local/etc
-      - ./src:/var/www/html
+      - ./src/php:/var/www/html
     links:
       - redis0cache
     networks:
