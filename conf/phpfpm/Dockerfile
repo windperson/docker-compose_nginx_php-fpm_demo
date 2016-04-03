@@ -6,7 +6,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 && apt-get clean
 RUN pear config-set php_ini /usr/local/etc/php/php.ini
 RUN docker-php-ext-install curl intl json mbstring zip mysqli opcache pdo_mysql
-RUN pecl install -o -f redis apcu-4.0.10 xdebug-2.4.0RC3 && rm -rf /tmp/pear
+RUN pecl install -o -f redis apcu-4.0.10 xdebug && rm -rf /tmp/pear
 
 VOLUME /usr/local/etc/
 VOLUME /var/www/html
