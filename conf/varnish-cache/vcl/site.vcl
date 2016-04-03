@@ -25,4 +25,7 @@ sub vcl_recv {
   if (req.url ~ "^/read_data/"){
     return(pass);
   }
+  if (req.url ~ "^/opcache*"){
+    return(pass);
+  }
 }

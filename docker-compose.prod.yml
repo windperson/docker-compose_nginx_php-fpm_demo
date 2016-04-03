@@ -93,7 +93,6 @@ services:
        - redis_data:/data
     volumes_from:
       - redis-conf:ro
-      - redis-data
     ports:
       - "6379:6379"
     networks:
@@ -110,7 +109,8 @@ services:
     image: windperson/phpdemo/redis-data-prod
     build:
       context: ./data
-      dockerfile: Dockerfile.data
+    volumes:
+      - redis_data:/data
     network_mode: "none"
 
 networks:
