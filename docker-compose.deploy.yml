@@ -18,9 +18,9 @@ services:
 
   varnish-conf:
     image: ${private_registry}phpdemo/varnish-conf-prod
-    build:
-      context: ./conf/varnish-cache
-      dockerfile: Dockerfile.conf
+    # build:
+    #   context: ./conf/varnish-cache
+    #   dockerfile: Dockerfile.conf
     network_mode: "none"
 
   # nginx container
@@ -100,15 +100,15 @@ services:
 
   redis-conf:
     image: ${private_registry}phpdemo/redis-conf-prod
-    build:
-      context: ./conf/redis
-      dockerfile: Dockerfile.conf
+    # build:
+    #   context: ./conf/redis
+    #   dockerfile: Dockerfile.conf
     network_mode: "none"
 
   redis-data:
     image: ${private_registry}phpdemo/redis-data-prod
-    build:
-      context: ./data
+    # build:
+    #   context: ./data
     volumes:
       - redis_data:/data
     network_mode: "none"
