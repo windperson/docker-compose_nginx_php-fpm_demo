@@ -1,4 +1,9 @@
 conf
 !conf/varnish-cache
 data
+doc
 src
+*.md
+docker-compose*
+!docker-compose.deploy.yml
+!docker-compose.base.deploy.yml

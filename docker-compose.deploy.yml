@@ -3,7 +3,7 @@ version: '2'
 services:
   varnish:
     extends:
-      file: docker-compose.base.yml
+      file: docker-compose.base.deploy.yml
       service: varnish-base
     env_file:
       - ./conf/varnish-cache/env/web.env
@@ -15,6 +15,7 @@ services:
       - "80:80"
     networks:
       - back_end
+    restart: always
 
   varnish-conf:
     image: ${private_registry}phpdemo/varnish-conf-prod
@@ -26,7 +27,7 @@ services:
   # nginx container
   default_site:
     extends:
-      file: docker-compose.base.yml
+      file: docker-compose.base.deploy.yml
       service: nginx-base
     #volumes:
     #  - ./conf/nginx/config:/etc/nginx
@@ -37,18 +38,19 @@ services:
       - default_site-conf
     networks:
       - back_end
+    restart: always
 
   default_site-conf:
     image: ${private_registry}phpdemo/default_site-conf-prod
-    build:
-      context: ./conf/nginx
-      dockerfile: Dockerfile.conf
+    # build:
+    #   context: ./conf/nginx
+    #   dockerfile: Dockerfile.conf
     network_mode: "none"
 
   # phpfpm container
   phpfpm:
     extends:
-      file: docker-compose.base.yml
+      file: docker-compose.base.deploy.yml
       service: phpfpm-base
     #volumes:
     #  - ./conf/phpfpm/config:/usr/local/etc
@@ -61,31 +63,32 @@ services:
       - redis0cache
     networks:
       - back_end
+    restart: always
 
   phpfpm-conf:
     image: ${private_registry}phpdemo/phpfpm-conf-prod
-    build:
-      context: ./conf/phpfpm
-      dockerfile: Dockerfile.conf
+    # build:
+    #   context: ./conf/phpfpm
+    #   dockerfile: Dockerfile.conf
     network_mode: "none"
 
   phpfpm-src:
     image: ${private_registry}phpdemo/phpfpm-src-prod
-    build:
-      context: ./src
+    # build:
+    #   context: ./src
     network_mode: "none"
 
   phpfpm-data:
     image: ${private_registry}phpdemo/phpfpm-data-prod
-    build:
-      context: ./src/php/data
+    # build:
+    #   context: ./src/php/data
     network_mode: "none"
 
 
   #cache container
   redis0cache:
     extends:
-      file: docker-compose.base.yml
+      file: docker-compose.base.deploy.yml
       service: redis-base
     volumes:
     #  - ./conf/redis/config:/usr/local/etc/redis
@@ -97,6 +100,7 @@ services:
       - "6379:6379"
     networks:
       - back_end
+    restart: always
 
   redis-conf:
     image: ${private_registry}phpdemo/redis-conf-prod

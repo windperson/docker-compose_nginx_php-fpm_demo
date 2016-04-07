@@ -3,7 +3,7 @@ MAINTAINER windperson
 RUN mkdir -p /src/conf/varnish-cache/env
 COPY conf/varnish-cache/env /src/conf/varnish-cache/env
 COPY docker-compose.deploy.yml /src
-COPY docker-compose.base.yml /src
+COPY docker-compose.base.deploy.yml /src
 RUN mkdir /dest
 CMD cp -apvr /src/* /dest && chown -R ${UID}:${GID} /dest
 VOLUME ["/dest"]
