@@ -9,19 +9,19 @@ services:
   # application container
   nginx-base:
     # build: conf/nginx
-    image: ${private_registry}phpdemo/nginx-base
+    image: ${private_docker_registry}phpdemo/nginx-base${release_tag}
     volumes:
       - /etc/localtime:/etc/localtime:ro #for sync with host time
 
   phpfpm-base:
     # build: conf/phpfpm
-    image: ${private_registry}phpdemo/phpfpm-base
+    image: ${private_docker_registry}phpdemo/phpfpm-base${release_tag}
     volumes:
       - /etc/localtime:/etc/localtime:ro #for sync with host time
 
   #cache container
   redis-base:
     # build: conf/redis
-    image: ${private_registry}phpdemo/redis-base
+    image: ${private_docker_registry}phpdemo/redis-base${release_tag}
     volumes:
       - /etc/localtime:/etc/localtime:ro #for sync with host time

@@ -17,7 +17,7 @@ services:
       - back_end
 
   varnish-conf:
-    image: ${private_registry}phpdemo/varnish-conf-prod
+    image: ${private_docker_registry}phpdemo/varnish-conf-prod${release_tag}
     build:
       context: ./conf/varnish-cache
       dockerfile: Dockerfile.conf
@@ -39,7 +39,7 @@ services:
       - back_end
 
   default_site-conf:
-    image: ${private_registry}phpdemo/default_site-conf-prod
+    image: ${private_docker_registry}phpdemo/default_site-conf-prod${release_tag}
     build:
       context: ./conf/nginx
       dockerfile: Dockerfile.conf
@@ -63,20 +63,20 @@ services:
       - back_end
 
   phpfpm-conf:
-    image: ${private_registry}phpdemo/phpfpm-conf-prod
+    image: ${private_docker_registry}phpdemo/phpfpm-conf-prod${release_tag}
     build:
       context: ./conf/phpfpm
       dockerfile: Dockerfile.conf
     network_mode: "none"
 
   phpfpm-src:
-    image: ${private_registry}phpdemo/phpfpm-src-prod
+    image: ${private_docker_registry}phpdemo/phpfpm-src-prod${release_tag}
     build:
       context: ./src
     network_mode: "none"
 
   phpfpm-data:
-    image: ${private_registry}phpdemo/phpfpm-data-prod
+    image: ${private_docker_registry}phpdemo/phpfpm-data-prod${release_tag}
     build:
       context: ./src/php/data
     network_mode: "none"
@@ -99,14 +99,14 @@ services:
       - back_end
 
   redis-conf:
-    image: ${private_registry}phpdemo/redis-conf-prod
+    image: ${private_docker_registry}phpdemo/redis-conf-prod${release_tag}
     build:
       context: ./conf/redis
       dockerfile: Dockerfile.conf
     network_mode: "none"
 
   redis-data:
-    image: ${private_registry}phpdemo/redis-data-prod
+    image: ${private_docker_registry}phpdemo/redis-data-prod${release_tag}
     build:
       context: ./data
     volumes:

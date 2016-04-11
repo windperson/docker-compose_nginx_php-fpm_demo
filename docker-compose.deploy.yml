@@ -2,6 +2,9 @@ version: '2'
 
 services:
   varnish:
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=runtime"
     extends:
       file: docker-compose.base.deploy.yml
       service: varnish-base
@@ -15,17 +18,24 @@ services:
       - "80:80"
     networks:
       - back_end
-    restart: always
+    restart: on-failure
 
   varnish-conf:
-    image: ${private_registry}phpdemo/varnish-conf-prod
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=config"
+    image: ${private_docker_registry}phpdemo/varnish-conf-prod${release_tag}
     # build:
     #   context: ./conf/varnish-cache
     #   dockerfile: Dockerfile.conf
     network_mode: "none"
+    restart: on-failure:1
 
   # nginx container
   default_site:
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=runtime"
     extends:
       file: docker-compose.base.deploy.yml
       service: nginx-base
@@ -38,17 +48,24 @@ services:
       - default_site-conf
     networks:
       - back_end
-    restart: always
+    restart: on-failure
 
   default_site-conf:
-    image: ${private_registry}phpdemo/default_site-conf-prod
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=config"
+    image: ${private_docker_registry}phpdemo/default_site-conf-prod${release_tag}
     # build:
     #   context: ./conf/nginx
     #   dockerfile: Dockerfile.conf
     network_mode: "none"
+    restart: on-failure:1
 
   # phpfpm container
   phpfpm:
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=runtime"
     extends:
       file: docker-compose.base.deploy.yml
       service: phpfpm-base
@@ -63,30 +80,45 @@ services:
       - redis0cache
     networks:
       - back_end
-    restart: always
+    restart: on-failure
 
   phpfpm-conf:
-    image: ${private_registry}phpdemo/phpfpm-conf-prod
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=config"
+    image: ${private_docker_registry}phpdemo/phpfpm-conf-prod${release_tag}
     # build:
     #   context: ./conf/phpfpm
     #   dockerfile: Dockerfile.conf
     network_mode: "none"
+    restart: on-failure:1
 
   phpfpm-src:
-    image: ${private_registry}phpdemo/phpfpm-src-prod
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=program"
+    image: ${private_docker_registry}phpdemo/phpfpm-src-prod${release_tag}
     # build:
     #   context: ./src
     network_mode: "none"
+    restart: on-failure:1
 
   phpfpm-data:
-    image: ${private_registry}phpdemo/phpfpm-data-prod
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=data"
+    image: ${private_docker_registry}phpdemo/phpfpm-data-prod${release_tag}
     # build:
     #   context: ./src/php/data
     network_mode: "none"
+    restart: on-failure:1
 
 
   #cache container
   redis0cache:
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=runtime"
     extends:
       file: docker-compose.base.deploy.yml
       service: redis-base
@@ -100,22 +132,30 @@ services:
       - "6379:6379"
     networks:
       - back_end
-    restart: always
+    restart: on-failure
 
   redis-conf:
-    image: ${private_registry}phpdemo/redis-conf-prod
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=config"
+    image: ${private_docker_registry}phpdemo/redis-conf-prod${release_tag}
     # build:
     #   context: ./conf/redis
     #   dockerfile: Dockerfile.conf
     network_mode: "none"
+    restart: on-failure:1
 
   redis-data:
-    image: ${private_registry}phpdemo/redis-data-prod
+    labels:
+      - "localhost.phpdemo.prod=true"
+      - "localhost.phpdemo.kind=data"
+    image: ${private_docker_registry}phpdemo/redis-data-prod${release_tag}
     # build:
     #   context: ./data
     volumes:
       - redis_data:/data
     network_mode: "none"
+    restart: on-failure:1
 
 networks:
   back_end:
