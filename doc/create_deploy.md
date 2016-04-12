@@ -31,4 +31,4 @@
 ### Upload (Push) docker images for deploy
 Run following to push all image to private registry server at once:
 
-``for i in $(docker images | awk -v image="^${registry_host}/phpdemo" '$1 ~ image {print $1}'); do docker push $i ; done``
+``for i in $(docker images | awk -v image="^${registry_host}/phpdemo" -v ver="$release_rev" '$1 ~ image && $2 == ver {print $1}'); do set -x && docker push $i && set +x ; done``

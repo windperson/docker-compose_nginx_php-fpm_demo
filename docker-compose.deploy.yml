@@ -18,7 +18,7 @@ services:
       - "80:80"
     networks:
       - back_end
-    restart: on-failure
+    restart: always
 
   varnish-conf:
     labels:
@@ -48,7 +48,7 @@ services:
       - default_site-conf
     networks:
       - back_end
-    restart: on-failure
+    restart: always
 
   default_site-conf:
     labels:
@@ -80,7 +80,7 @@ services:
       - redis0cache
     networks:
       - back_end
-    restart: on-failure
+    restart: always
 
   phpfpm-conf:
     labels:
@@ -132,7 +132,7 @@ services:
       - "6379:6379"
     networks:
       - back_end
-    restart: on-failure
+    restart: always
 
   redis-conf:
     labels:
